@@ -10,7 +10,6 @@ import {
 } from "../actions";
 
 const filter_reducer = (state, action) => {
-  console.log(action.type);
   if (action.type === LOAD_PRODUCTS) {
     let maxPrice = action.payload.map((product) => product.price);
     maxPrice = Math.max(...maxPrice);
