@@ -18,9 +18,8 @@ const cart_reducer = (state, action) => {
             newAmount = cartItem.max;
           }
           return { ...cartItem, amount: newAmount };
-        } else {
-          return cartItem;
         }
+        return cartItem;
       });
       return { ...state, cart: tempCart };
     } else {
@@ -50,16 +49,31 @@ const cart_reducer = (state, action) => {
     const { value, id } = action.payload;
     return {
       ...state,
-      cart: state.cart.map((item) => {
-        if (item.id === id) {
-          if (value === "inc" && item.amount <= item.max) {
-            return { ...item, amount: item.amount + 1 };
-          } else if (value === "dec" && item.amount > 1) {
-            return { ...item, amount: item.amount - 1 };
+      cart: state.cart
+        .map((item) => {
+          if (item.id === id) {
+            if (value === "inc" && item.amount < item.max) {
+              return { ...item, amount: item.amount + 1 };
+            } else if (value === "dec" && item.amount > 1) {
+              return { ...item, amount: item.amount - 1 };
+            } else if (item.amount <= 1) {
+              return false;
+            }
           }
-        }
-        return item;
-      }),
+          return item;
+        })
+        .filter(Boolean),
+    };
+  }
+  if (action.type === COUNT_CART_TOTALS) {
+    return {
+      ...state,
+      total_items: state.cart.reduce((acc, item) => {
+        return acc + item.amount;
+      }, 0),
+      total_amount: state.cart.reduce((acc, item) => {
+        return acc + item.amount * item.price;
+      }, 0),
     };
   }
 
