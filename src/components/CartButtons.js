@@ -31,7 +31,7 @@ const CartButtons = () => {
           className="auth-btn"
           onClick={() => {
             clearCart();
-            logout({ returnTo: window.location.origin });
+            logout();
           }}
         >
           Logout <FaUserMinus />
